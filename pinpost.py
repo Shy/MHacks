@@ -191,7 +191,6 @@ class CardForm(Form):
 	address_state = TextField('State', validators=[DataRequired()])
 	address_zip = TextField('Zip', validators=[DataRequired(), Regexp("^\d{5}$", message="Valid zip code not entered.")])
 
-
 @app.route('/card', methods=['GET', 'POST'])
 def card():
 	form = CardForm()
@@ -228,8 +227,8 @@ def card():
 			Lob_Socket.SendPostcard(top_pin['image_large_url'], toaddr, message, form.address_email.data)
 		except Exception, e:
 			#TODO: show lob error
-		 	print "Lob error occurred"
-		 	return render_template('card.html', form=form, form_error="Lob error occurred.")
+			print "Lob error occurred"
+			return render_template('card.html', form=form, form_error="Lob error occurred.")
 		return redirect(url_for('card'))
 	else:
 		#TODO: show vailidation errors in card.html
