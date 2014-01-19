@@ -1,4 +1,4 @@
-import Pintrest_Socket
+import Pinterest_Socket
 import Lob_Socket
 import lob
 import time

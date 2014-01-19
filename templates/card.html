@@ -1,0 +1,17 @@
+{% extends "card_layout.html" %}
+{% block body %}
+<h2>Send a card</h2>
+
+<form action="{{ url_for('card') }}" method=post>
+{{ form.hidden_tag() }}
+{{ form.pinterest_name.label }} {{ form.pinterest_name(size=30) }}<br/>
+{{ form.address_name.label }} {{ form.address_name(size=30) }}<br/>
+{{ form.address_email.label }} {{ form.address_email(size=30) }}<br/>
+{{ form.address_line1.label }} {{ form.address_line1(size=30) }}<br/>
+{{ form.address_line2.label }} {{ form.address_line2(size=30) }}<br/>
+{{ form.address_city.label }} {{ form.address_city(size=30) }}<br/>
+{{ form.address_state.label }} {{ form.address_state(size=30) }}<br/>
+{{ form.address_zip.label }} {{ form.address_zip(size=30) }}<br/>
+<input type="submit" value="Go">
+</form>
+{% endblock %}

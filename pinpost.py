@@ -8,16 +8,13 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from contextlib import closing
 from flask.ext.sqlalchemy import SQLAlchemy
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import scoped_session, sessionmaker
-# from sqlalchemy.ext.declarative import declarative_base
+import lob
+import Pinterest_Socket
+import Lob_Socket
+from flask_wtf import Form
+from wtforms import TextField
+from wtforms.validators import DataRequired
 
-# engine = create_engine('sqlite:////tmp/test.db', convert_unicode=True)
-# db_session = scoped_session(sessionmaker(autocommit=False,
-#                                          autoflush=False,
-#                                          bind=engine))
 
 # configuration
 DATABASE = '/tmp/flaskr.db'
@@ -25,9 +22,8 @@ DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
+lob.api_key = 'test_0bead6806b12c3668ee03810cf181c78141'
 
-# create our application
-# app = Flask(__name__)
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -101,12 +97,7 @@ def teardown_request(exception):
 
 @app.route('/')
 def show_entries():
-	cur = g.db.execute('select users, pws from entries order by id desc')
-	entries = [dict(user=row[0], pws=row[1]) for row in cur.fetchall()]
-	return render_template('show_entries.html', entries=entries)
-
-
-
+	return render_template('show_entries.html', entries=[])
 
 @app.route('/add', methods=['POST'])
 def add_entry():
@@ -148,47 +139,12 @@ def login():
 
 	return render_template('login.html', error=error)
 
-# original login method without database integration
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-# 	error = None
-# 	if request.method == 'POST':
-# 		if request.form['username'] != app.config['USERNAME']:
-# 			error = 'Invalid username'
-# 		elif request.form['password'] != app.config['PASSWORD']:
-# 			error = 'Invalid password'
-# 		else:
-# 			session['logged_in'] = True
-# 			flash('You were logged in')
-# 			return redirect(url_for('show_entries'))
-# 	return render_template('login.html', error=error)
-
 #based off of the login and new post
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	error = None
 	if request.method == 'POST':
 		render_template('register.html')
-
-		# print 'post'
-		# g.db.execute('insert into entries (users, pws) values (?, ?)', 
-		# 		 [request.form['un'], request.form['pw']])
-
-		# artifacts from when we were taking input and putting it into entries as strings
-		# g.db.execute('insert into entries (users, pws) values (?, ?)', 
-		# 		 [request.form['un'], "password: " + request.form['pw'] + \
-		# 		 					", pinterest handle: " + request.form['ph'] + \
-		# 		 					", street address: " + request.form['st'] + \
-		# 		 					", city, state, zip: " + request.form['zp']])
-
-		# # flash('User: ' + request.form['un'])
-		# g.db.commit()
-
-		# flash ('User: ' + request.form['un'])
-
-#name, pinterest handle, username, password, email, address
-		# Session = sessionmaker()
-		# session = Session()
 	
 		name = request.form['name']
 		pinterest = request.form['ph']
@@ -211,17 +167,72 @@ def register():
 		flash('Congratulations ' + newUser.name)
 	return render_template('register.html')
 
-		# cur = g.db.execute('select users, pws from entries order by id desc')
-		# 	entries = [dict(user=row[0], pws=row[1]) for row in cur.fetchall()]
-		# 	return render_template('show_entries.html', entries=entries)
-
-	#return redirect(url_for('register'))
-
 @app.route('/logout')
 def logout():
 	session.pop('logged_in', None)
 	flash('You were logged out')
 	return redirect(url_for('show_entries'))
+
+@app.route('/admin_send_postcards')
+def admin_send_postcards():
+	lob.api_key = 'test_0bead6806b12c3668ee03810cf181c78141'
+	for u in db.session.query(User):
+		print u.name
+	#TODO: render a proper view
+	return render_template('login.html')
+
+class CardForm(Form):
+	pinterest_name = TextField('Pinterest Name', validators=[DataRequired()])
+	address_name = TextField('Name', validators=[DataRequired()])
+	address_email = TextField('Email', validators=[DataRequired()])
+	address_line1 = TextField('Address Line 1', validators=[DataRequired()])
+	address_line2 = TextField('Address Line 2', validators=[])
+	address_city = TextField('City', validators=[DataRequired()])
+	address_state = TextField('State', validators=[DataRequired()])
+	address_zip = TextField('Zip', validators=[DataRequired()])
+
+
+@app.route('/card', methods=['GET', 'POST'])
+def card():
+	form = CardForm()
+	if request.method == 'POST' and form.validate():
+		try:
+			top_pin = Pinterest_Socket.Get(form.pinterest_name.data)
+		except Exception, e:
+			#TOOD: show pinterest error
+			print "Pinterest error occurred"
+			return render_template('card.html', form=form)
+
+		message = ""
+		if top_pin["description"] and top_pin["domain"]:
+			message = top_pin["description"] + "\n- " + top_pin["domain"]
+		elif top_pin["description"]:
+			message = top_pin["description"]
+		elif top_pin["domain"]:
+			message = top_pin["domain"]
+
+		toaddr = lob.Address.create(
+			name=form.address_name.data,
+			address_line1=form.address_line1.data,
+			address_line2=form.address_line2.data,
+			email=form.address_email.data,
+			address_city=form.address_city.data,
+			address_state=form.address_state.data,
+			address_country="US",
+			address_zip=form.address_zip.data).to_dict()
+
+		try:
+			Lob_Socket.SendPostcard(top_pin['image_large_url'], toaddr, message)
+		except Exception, e:
+			#TODO: show lob error
+			print "Lob error occurred"
+			return render_template('card.html', form=form)
+		return redirect(url_for('card'))
+	else:
+		#TODO: show vailidation errors in card.html
+		return render_template('card.html', form=form)
+
+
 	
 if __name__ == '__main__':
 	app.run()
