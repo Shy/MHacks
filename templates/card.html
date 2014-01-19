@@ -3,14 +3,14 @@
 
 <form action="{{ url_for('card') }}" method=post>
 {{ form.hidden_tag() }}
-{{ form.pinterest_name.label }} </br>{{ form.pinterest_name(size=30) }}<br/>
-{{ form.address_name.label }} </br>{{ form.address_name(size=30) }}<br/>
-{{ form.address_email.label }} </br>{{ form.address_email(size=30) }}<br/>
-{{ form.address_line1.label }} </br>{{ form.address_line1(size=30) }}<br/>
-{{ form.address_line2.label }} </br>{{ form.address_line2(size=30) }}<br/>
-{{ form.address_city.label }}</br> {{ form.address_city(size=30) }}<br/>
-{{ form.address_state.label }} </br>{{ form.address_state(size=30) }}<br/>
-{{ form.address_zip.label }} </br>{{ form.address_zip(size=30) }}<br/>
+{{ form.pinterest_name.label }} </br>{{ form.pinterest_name(size=48) }}<br/>
+{{ form.address_name.label }} </br>{{ form.address_name(size=48) }}<br/>
+{{ form.address_email.label }} </br>{{ form.address_email(size=48) }}<br/>
+{{ form.address_line1.label }} </br>{{ form.address_line1(size=48) }}<br/>
+{{ form.address_line2.label }} </br>{{ form.address_line2(size=48) }}<br/>
+{{ form.address_city.label }}</br> {{ form.address_city(size=48) }}<br/>
+{{ form.address_state.label }} </br>{{ form.address_state(size=48) }}<br/>
+{{ form.address_zip.label }} </br>{{ form.address_zip(size=48) }}<br/>
 <br><input type="submit" value="Send Postcard">
 </form>
 {% endblock %}

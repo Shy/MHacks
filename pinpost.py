@@ -221,12 +221,12 @@ def card():
 			address_country="US",
 			address_zip=form.address_zip.data).to_dict()
 
-		try:
-			Lob_Socket.SendPostcard(top_pin['image_large_url'], toaddr, message)
-		except Exception, e:
-			#TODO: show lob error
-			print "Lob error occurred"
-			return render_template('card.html', form=form)
+		# try:
+		Lob_Socket.SendPostcard(top_pin['image_large_url'], toaddr, message, form.address_email.data)
+		# except Exception, e:
+		# 	#TODO: show lob error
+		# 	print "Lob error occurred"
+		# 	return render_template('card.html', form=form)
 		return redirect(url_for('card'))
 	else:
 		#TODO: show vailidation errors in card.html

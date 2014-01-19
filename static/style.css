@@ -1,6 +1,6 @@
 body				{ font-family: sans-serif; background: #eee; }
 a, h1, h2			{ color: : #377ba8; }
-h1, h2				{ font-family: 'Georgia', serif; margin: 0; }
+h1, h2				{ font-family: 'Pacifico', serif; margin: 0; text-align: center;padding-bottom: 20px; padding-top: 10px; font-size: 50px; }
 h1					{ border-bottom: 2px solid #eee; }
 h2					{ font-size: 1.2 em; }
 
@@ -17,3 +17,4 @@ h2					{ font-size: 1.2 em; }
 					  border: 1px solid #aacbe2; }
 .error				{ background: #f0d6d6; padding: 0.5em; }
 body                 {background-image:url("img/green.jpg")}
+label, form	{font-family: 'Droid Serif', serif; }
