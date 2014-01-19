@@ -60,7 +60,7 @@ class Lob_Socket(object):
     "<p>"+message+"</p>")
     emailMessage.add_to(email, "PinPost User")
     s.web.send(emailMessage)
-    
+
 def SendPostcard(url, toaddr, message, email):
   client = Lob_Socket()
-  client.CreatePostCard(url,toaddr, message)
+  client.CreatePostCard(url,toaddr, message, email)
