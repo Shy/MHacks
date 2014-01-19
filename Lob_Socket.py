@@ -59,6 +59,7 @@ class Lob_Socket(object):
     emailMessage = sendgrid.Message("Shyamal@Ruparel.co", "PinPost Recipt", message,
     "<p>"+message+"</p>")
     emailMessage.add_to(email, "PinPost User")
+    emailMessage.add_attachment("PostCard.pdf", "outfile")
     s.web.send(emailMessage)
 
 def SendPostcard(url, toaddr, message, email):
