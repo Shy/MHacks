@@ -6,7 +6,7 @@ import io
 import lob
 from datetime import datetime
 
-s = sendgrid.Sendgrid('thelonelygod', 'dilip1991', secure=True)
+s = sendgrid.Sendgrid('thelonelygod', '#PASSWORD#', secure=True)
 
 
 class Lob_Socket(object):
@@ -60,7 +60,10 @@ class Lob_Socket(object):
     "<p>"+message+"</p>")
     emailMessage.add_to(email, "PinPost User")
     emailMessage.add_attachment("PostCard.pdf", "outfile")
-    s.web.send(emailMessage)
+    try:
+        s.web.send(emailMessage)
+    except Exception, e:
+        print "Could not send mail with sendgrid."
 
 def SendPostcard(url, toaddr, message, email):
   client = Lob_Socket()
