@@ -1,0 +1,7 @@
+Flask
+flask-sqlalchemy
+flask-wtf
+pillow
+sendgrid
+git+https://github.com/lob/lob-python
+http://shyruparel.com/pinterest-python-master.zip
