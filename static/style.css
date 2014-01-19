@@ -15,6 +15,6 @@ h2					{ font-size: 1.2 em; }
 					  margin-bottom: 1em; background: #fafafa; }
 .flash				{ background: #cee5F5; padding: 0.5em;
 					  border: 1px solid #aacbe2; }
-.error				{ background: #f0d6d6; padding: 0.5em; }
+.error, .errors		{ font-size: 70%; padding: 0.5em; list-style: none; color: red; }
 body                 {background-image:url("img/green.jpg")}
 label, form	{font-family: 'Droid Serif', serif; }

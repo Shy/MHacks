@@ -186,7 +186,7 @@ class CardForm(Form):
 	address_name = TextField('Name', validators=[DataRequired()])
 	address_email = TextField('Email', validators=[DataRequired(), Email()])
 	address_line1 = TextField('Address Line 1', validators=[DataRequired()])
-	address_line2 = TextField('Address Line 2', validators=[])
+	address_line2 = TextField('Address Line 2 (optional)', validators=[])
 	address_city = TextField('City', validators=[DataRequired()])
 	address_state = TextField('State', validators=[DataRequired()])
 	address_zip = TextField('Zip', validators=[DataRequired(), Regexp("^\d{5}$", message="Valid zip code not entered.")])
@@ -201,7 +201,10 @@ def card():
 		except Exception, e:
 			#TOOD: show pinterest error
 			print "Pinterest error occurred"
-			return render_template('card.html', form=form)
+			top_pin = None
+		if not top_pin:
+			form.pinterest_name.errors.append("Pintereset error occurred.")
+			return render_template('card.html', form=form)#, form_error="Pinterest error occurred.")
 
 		message = ""
 		if top_pin["description"] and top_pin["domain"]:
@@ -221,12 +224,12 @@ def card():
 			address_country="US",
 			address_zip=form.address_zip.data).to_dict()
 
-		# try:
-		Lob_Socket.SendPostcard(top_pin['image_large_url'], toaddr, message, form.address_email.data)
-		# except Exception, e:
-		# 	#TODO: show lob error
-		# 	print "Lob error occurred"
-		# 	return render_template('card.html', form=form)
+		try:
+			Lob_Socket.SendPostcard(top_pin['image_large_url'], toaddr, message, form.address_email.data)
+		except Exception, e:
+			#TODO: show lob error
+		 	print "Lob error occurred"
+		 	return render_template('card.html', form=form, form_error="Lob error occurred.")
 		return redirect(url_for('card'))
 	else:
 		#TODO: show vailidation errors in card.html
