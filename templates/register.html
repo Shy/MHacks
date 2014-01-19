@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Register</h2>
+
+  <form action="{{ url_for('register') }}" method=post>
+  	<dl>
+      <dt>Name:
+      <dd><input type=text name=name>
+      <dt>Pinterest Handle:
+      <dd><input type=text name=ph>	
+      <dt>Username:
+  		<dd><input type=text name=un>
+  		<dt>Password:
+  		<dd><input type=password name=pw>
+      <dt>Email:
+      <dd><input type=text name=email>
+      <dt>Street Address Line 1:
+      <dd><input type=text name=st1>
+      <dt>Street Address Line 2:
+      <dd><input type=text name=st2>
+      <dt>City:
+      <dd><input type=text name=city>
+      <dt>State:
+      <dd><input type=text name=state>
+      <dt>Zip:
+      <dd><input type=text name=zp>
+      <dl>
+
+  		<dd><input type=submit value=Register>
+  	</dl>
+  </form>
+ {% endblock %}
