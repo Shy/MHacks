@@ -25,14 +25,20 @@ toaddr = lob.Address.create(name=toName, address_line1=toaddress_line1, address_
 start_time = time.time()
 try:
 	TopPin = Pintrest_Socket.Get(user_name)
-except:
-	print "User DNE or has no Boards"
+except Exception, e:
+	print "User DNE or has no Boards", e
 	sys.exit()
 end_time = time.time()
 print("Elapsed time was %g seconds" % (end_time - start_time))
 
 url = TopPin["image_large_url"]
-message = TopPin["description"] + "\n- " + TopPin["domain"]
+message = ""
+if TopPin["description"] and TopPin["domain"]:
+        message = TopPin["description"] + "\n- " + TopPin["domain"]
+elif TopPin["description"]:
+        message = TopPin["description"]
+elif TopPin["domain"]:
+        message = TopPin["domain"]
 
 
 print "Message: \n" + message
@@ -40,7 +46,7 @@ start_time = time.time()
 try:
 	Lob_Socket.SendPostcard(url,toaddr,message)
 	end_time = time.time()
-except:
-	print "Lob Failure"
+except Exception, e:
+	print "Lob Failure", e
 	sys.exit()
 print("Elapsed time was %g seconds" % (end_time - start_time))
