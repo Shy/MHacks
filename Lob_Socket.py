@@ -1,16 +1,20 @@
 from PIL import Image
+import sendgrid
 import urllib2 as urllib
 import os, sys
 import io
 import lob
 from datetime import datetime
 
+s = sendgrid.Sendgrid('thelonelygod', 'dilip1991', secure=True)
+
+
 class Lob_Socket(object):
   def __init__(self):  
     lob.api_key = 'test_0bead6806b12c3668ee03810cf181c78141'
     
 
-  def CreatePostCard(self, url,toaddr, message):
+  def CreatePostCard(self, url,toaddr, message, email):
     fd = urllib.urlopen(url)
     image_file = io.BytesIO(fd.read())
     im = Image.open(image_file)
@@ -52,7 +56,12 @@ class Lob_Socket(object):
                                from_address=fromaddr).to_dict()
 
     print postcard
+    emailMessage = sendgrid.Message("Shyamal@Ruparel.co", "PinPost Recipt", message,
+    "<p>"+message+"</p>")
+    emailMessage.add_to(email, "PinPost User")
+    emailMessage.add_attachment("PostCard.pdf", "outfile")
+    s.web.send(emailMessage)
 
-def SendPostcard(url, toaddr, message):
+def SendPostcard(url, toaddr, message, email):
   client = Lob_Socket()
-  client.CreatePostCard(url,toaddr, message)
+  client.CreatePostCard(url,toaddr, message, email)

@@ -1,6 +1,5 @@
 {% extends "card_layout.html" %}
 {% block body %}
-<h2>Send a card</h2>
 
 <form action="{{ url_for('card') }}" method=post>
 {{ form.hidden_tag() }}
@@ -44,6 +43,6 @@
     <ul class="errors">{% for error in form.address_zip.errors %}<li>{{ error }}</li>{% endfor %}</ul><br/>
 {% endif %}
 
-<input type="submit" value="Go">
+<br/><input type="submit" value="Send Postcard">
 </form>
 {% endblock %}
