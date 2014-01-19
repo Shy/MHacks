@@ -5,13 +5,45 @@
 <form action="{{ url_for('card') }}" method=post>
 {{ form.hidden_tag() }}
 {{ form.pinterest_name.label }} {{ form.pinterest_name(size=30) }}<br/>
+{% if form.pinterest_name.errors %}
+    <ul class="errors">{% for error in form.pinterest_name.errors %}<li>{{ error }}</li>{% endfor %}</ul><br/>
+{% endif %}
+
 {{ form.address_name.label }} {{ form.address_name(size=30) }}<br/>
+{% if form.address_name.errors %}
+    <ul class="errors">{% for error in form.address_name.errors %}<li>{{ error }}</li>{% endfor %}</ul><br/>
+{% endif %}
+
 {{ form.address_email.label }} {{ form.address_email(size=30) }}<br/>
+{% if form.address_email.errors %}
+    <ul class="errors">{% for error in form.address_email.errors %}<li>{{ error }}</li>{% endfor %}</ul><br/>
+{% endif %}
+
 {{ form.address_line1.label }} {{ form.address_line1(size=30) }}<br/>
+{% if form.address_line1.errors %}
+    <ul class="errors">{% for error in form.address_line1.errors %}<li>{{ error }}</li>{% endfor %}</ul><br/>
+{% endif %}
+
 {{ form.address_line2.label }} {{ form.address_line2(size=30) }}<br/>
+{% if form.address_line2.errors %}
+    <ul class="errors">{% for error in form.address_line2.errors %}<li>{{ error }}</li>{% endfor %}</ul><br/>
+{% endif %}
+
 {{ form.address_city.label }} {{ form.address_city(size=30) }}<br/>
+{% if form.address_city.errors %}
+    <ul class="errors">{% for error in form.address_city.errors %}<li>{{ error }}</li>{% endfor %}</ul><br/>
+{% endif %}
+
 {{ form.address_state.label }} {{ form.address_state(size=30) }}<br/>
+{% if form.address_state.errors %}
+    <ul class="errors">{% for error in form.address_state.errors %}<li>{{ error }}</li>{% endfor %}</ul><br/>
+{% endif %}
+
 {{ form.address_zip.label }} {{ form.address_zip(size=30) }}<br/>
+{% if form.address_zip.errors %}
+    <ul class="errors">{% for error in form.address_zip.errors %}<li>{{ error }}</li>{% endfor %}</ul><br/>
+{% endif %}
+
 <input type="submit" value="Go">
 </form>
 {% endblock %}

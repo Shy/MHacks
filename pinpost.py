@@ -13,7 +13,7 @@ import Pinterest_Socket
 import Lob_Socket
 from flask_wtf import Form
 from wtforms import TextField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email, Regexp
 
 
 # configuration
@@ -184,12 +184,12 @@ def admin_send_postcards():
 class CardForm(Form):
 	pinterest_name = TextField('Pinterest Name', validators=[DataRequired()])
 	address_name = TextField('Name', validators=[DataRequired()])
-	address_email = TextField('Email', validators=[DataRequired()])
+	address_email = TextField('Email', validators=[DataRequired(), Email()])
 	address_line1 = TextField('Address Line 1', validators=[DataRequired()])
 	address_line2 = TextField('Address Line 2', validators=[])
 	address_city = TextField('City', validators=[DataRequired()])
 	address_state = TextField('State', validators=[DataRequired()])
-	address_zip = TextField('Zip', validators=[DataRequired()])
+	address_zip = TextField('Zip', validators=[DataRequired(), Regexp("^\d{5}$", message="Valid zip code not entered.")])
 
 
 @app.route('/card', methods=['GET', 'POST'])
